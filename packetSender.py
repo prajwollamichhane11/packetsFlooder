@@ -4,6 +4,7 @@ import time
 
 
 
+
 def init_socket(ip):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(4)
