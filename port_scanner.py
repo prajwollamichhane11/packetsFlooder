@@ -20,6 +20,7 @@ if __name__ == '__main__':
     final_port = int(input("Enter the port you want to search to: "))
 
     for socket_count in range(801,final_port):
+        print('---------------------------')
         print (socket_count)
         value = check_socket(args.host,socket_count)
         if value == 1:
