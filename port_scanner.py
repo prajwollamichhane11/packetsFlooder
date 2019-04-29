@@ -18,10 +18,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
 
-    if args.host == True:
-        final_port = int(input("Enter the port you want to search to: "))
+    if args.host != None:
+        final_port = int(input("Enter the port above 80 you want to search to: "))
 
-        for socket_count in range(801,final_port):
+        for socket_count in range(80,final_port):
             print('---------------------------')
             print (socket_count)
             value = check_socket(args.host,socket_count)
